@@ -73,16 +73,16 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
    ![5001](https://github.com/user-attachments/assets/36e73892-527b-4d50-bfe9-ba00190e9636)
 
 
-3. **Accede al contenedor kafka**
+2. **Accede al contenedor kafka**
    ```bash
     docker exec -it kafka kafka-console-consumer.sh \
    --bootstrap-server kafka:9092 \
    --topic flight-delay-ml-response \
    --from-beginning
 
-  Deberías ver JSONs con las predicciones completas.
+   Deberías ver JSONs con las predicciones completas.
 
-5. **Verificar que se guardó en MongoDB**
+3. **Verificar que se guardó en MongoDB**
 
    Accede al contenedor de Mongo:
    ```bash
@@ -91,7 +91,7 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
    use agile_data_science
    db.flight_delay_ml_response.find().pretty()
 
-  Cada documento debe contener los datos de entrada más la predicción.
+   Cada documento debe contener los datos de entrada más la predicción.
 
 ## 3. Desplegar NiFi y guardar predicciones en un fichero `.txt` cada 10 segundos
 
