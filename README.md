@@ -107,7 +107,8 @@ Ya está incluido en `docker-compose.yml`. Puedes acceder a la interfaz desde tu
 
 Desde la interfaz gráfica, hemos creado el siguiente flujo:
 
-[ConsumeKafka_2_6] ─── success ───▶ [PutFile]
+![nifi](https://github.com/user-attachments/assets/414d14be-6bd1-4a79-8ad6-9ceeee2538a9)
+
 
 #### Configuración de `ConsumeKafka_2_6`
 
