@@ -150,14 +150,15 @@ El checkpoint del stream se guarda en /tmp/hdfs_checkpoint
    **Verifica si existen los ficheros .parquet:**
  
     docker exec -it hadoop-datanode bash
-    
     hdfs dfs -ls /user/spark/flight_prediction
-    
     hdfs dfs -cat <nombre_del_parquet>
 
 ###  Evidencia visual del guardado en HDFS
 
 A continuación accedemos al explorador web de Hadoop (`http://localhost:9870`). Vamos a la sección de "Utilities" y a "Browse the file system". Ahora entramos en la ruta `/user/spark/flight_prediction`, donde se están guardando correctamente las predicciones en formato `.parquet`.
+
+![hdfs](https://github.com/user-attachments/assets/7a3d7427-ea6e-4f6a-a90b-340ff156859e)
+
 
  Esto confirma que el flujo de:
 **Kafka ➜ Spark ➜ HDFS**
