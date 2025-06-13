@@ -1,0 +1,182 @@
+version: '3.8'
+
+services:
+
+  mongo:
+    image: mongo:7.0.17
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./data/origin_dest_distances.jsonl:/data/origin_dest_distances.jsonl
+      - ./resources/import_distances.sh:/docker-entrypoint-initdb.d/import_distances.sh:ro
+    networks:
+      - app_net
+
+  kafka:
+    image: bitnami/kafka:3.9.0
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_CFG_NODE_ID=0
+      - KAFKA_CFG_PROCESS_ROLES=broker,controller
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
+      - KAFKA_KRAFT_CLUSTER_ID=local-cluster
+    volumes:
+      - kafka_data:/bitnami
+    networks:
+      - app_net
+  
+  kafka-init:
+    image: bitnami/kafka:3.9.0
+    container_name: kafka-init
+    depends_on:
+      - kafka
+    entrypoint: ["/bin/bash", "-c"]
+    command: >
+      "
+      sleep 10 &&
+      kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic flight-delay-ml-request &&
+      kafka-topics.sh --create --bootstrap-server kafka:9092 --replication-factor 1 --partitions 1 --topic flight-delay-ml-response &&
+      echo ' Kafka topics creados'
+      "
+    networks:
+      - app_net
+
+
+  flask_app:
+    build: .
+    container_name: flask_app
+    ports:
+      - "5001:5001"
+    depends_on:
+      - kafka
+      - mongo
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PROJECT_HOME=/app
+    networks:
+      - app_net
+      
+  spark-master:
+    image: bitnami/spark:3.5.3
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+    ports:
+      - "7077:7077"
+      - "8086:8080"
+    volumes:
+      - .:/practica_creativa
+    networks:
+      - app_net
+
+  spark-worker-1:
+    image: bitnami/spark:3.5.3
+    container_name: spark-worker-1
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    depends_on:
+      - spark-master
+    ports:
+      - "8084:8081"
+    volumes:
+      - .:/practica_creativa
+    networks:
+      - app_net
+
+  spark-worker-2:
+    image: bitnami/spark:3.5.3
+    container_name: spark-worker-2
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    depends_on:
+      - spark-master
+    ports:
+      - "8085:8081"
+    volumes:
+      - .:/practica_creativa
+    networks:
+      - app_net
+
+  spark-submit:
+    image: bitnami/spark:3.5.3
+    container_name: spark-submit
+    depends_on:
+      - spark-master
+      - spark-worker-1
+      - spark-worker-2
+    volumes:
+      - .:/practica_creativa
+    networks:
+      - app_net
+    command: 
+      bash -c "sleep 30;
+      /opt/bitnami/spark/bin/spark-submit
+        --packages org.mongodb.spark:mongo-spark-connector_2.12:10.4.1,org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.3
+        --class es.upm.dit.ging.predictor.MakePrediction
+        --deploy-mode client
+        --master spark://spark-master:7077
+        /practica_creativa/flight_prediction/target/scala-2.12/flight_prediction_2.12-0.1.jar"
+        
+  nifi:
+    image: apache/nifi:1.25.0
+    container_name: nifi
+    ports:
+      - "8080:8080"
+    environment:
+      - NIFI_WEB_HTTP_PORT=8080
+    networks:
+      - app_net
+    volumes:
+      - ./nifi_out:/opt/nifi/nifi_out    
+
+  hadoop-namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: hadoop-namenode
+    ports:
+      - "9870:9870"     
+      - "8020:8020"        
+    environment:
+      - CLUSTER_NAME=example1
+      - INIT_DAEMON_STEP=setup_hdfs
+      - HDFS_CONF_dfs_webhdfs_enabled=true
+      - HDFS_CONF_dfs_permissions_enabled=false
+      - HDFS_CONF_dfs_disk_balancer_enabled=false
+
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+    networks:
+      - app_net
+
+  hadoop-datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: hadoop-datanode
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://hadoop-namenode:8020
+      - HDFS_CONF_dfs_webhdfs_enabled=true  
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    networks:
+      - app_net
+
+
+volumes:
+  mongo_data:
+  kafka_data:
+  hadoop_namenode:
+  hadoop_datanode:
+
+  
+networks:
+  app_net:
+

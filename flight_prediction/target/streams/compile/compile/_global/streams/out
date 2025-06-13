@@ -1,0 +1,4 @@
+[0m[[0m[31merror[0m] [0m[0m/home/sara.reyes/practica_creativa/flight_prediction/src/main/scala/es/upm/dit/ging/predictor/MakePrediction.scala:75:28: identifier expected but integer literal found.[0m
+[0m[[0m[31merror[0m] [0m[0m  --bootstrap-server kafka:9092 \[0m
+[0m[[0m[31merror[0m] [0m[0m                           ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
