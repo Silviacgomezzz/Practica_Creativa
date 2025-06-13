@@ -134,7 +134,9 @@ En scheduling:
     ls ./nifi_out/
 
 3. Abre los .txt generados:
-cat ./nifi_out/*.txt
+   
+cat <nombre_del_txt>
+
 Deberías ver las predicciones en formato JSON.
 
 ## 4. Escribir las predicciones en HDFS en lugar de MongoDB
@@ -151,7 +153,7 @@ El checkpoint del stream se guarda en /tmp/hdfs_checkpoint
     
     hdfs dfs -ls /user/spark/flight_prediction
     
-    hdfs dfs -cat <nombre_del_parquet
+    hdfs dfs -cat <nombre_del_parquet>
 
 ###  Evidencia visual del guardado en HDFS
 
