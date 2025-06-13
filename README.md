@@ -76,7 +76,7 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
 3. **Accede al contenedor kafka**
 
    docker exec -it kafka kafka-console-consumer.sh \
-  --bootstrap-server localhost:9092 \
+  --bootstrap-server kafka:9092 \
   --topic flight-delay-ml-request \
   --from-beginning
 
