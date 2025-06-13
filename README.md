@@ -75,17 +75,14 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
 
 3. **Accede al contenedor kafka**
 
-   docker exec -it kafka bash
-
-   Luego ejecuta:
-   kafka-console-consumer.sh \
-  --bootstrap-server kafka:9092 \
-  --topic flight-delay-ml-response \
+   docker exec -it kafka kafka-console-consumer.sh \
+  --bootstrap-server localhost:9092 \
+  --topic flight-delay-ml-request \
   --from-beginning
-  
+
     Deberías ver JSONs con las predicciones completas.
 
-4. **Verificar que se guardó en MongoDB**
+5. **Verificar que se guardó en MongoDB**
 
    Accede al contenedor de Mongo:
    ```bash
