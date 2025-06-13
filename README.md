@@ -64,7 +64,10 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
 
     Rellena los campos y haz clic en Enviar predicción.
 
-2. **Accede al contenedor kafka**
+   ![5001](https://github.com/user-attachments/assets/36e73892-527b-4d50-bfe9-ba00190e9636)
+
+
+3. **Accede al contenedor kafka**
 
    docker exec -it kafka bash
 
@@ -76,7 +79,7 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
   
     Deberías ver JSONs con las predicciones completas.
 
-3. **Verificar que se guardó en MongoDB**
+4. **Verificar que se guardó en MongoDB**
 
    Accede al contenedor de Mongo:
    ```bash
@@ -142,9 +145,11 @@ El resultado se escribirá en la ruta /user/spark/output en HDFS.
 El checkpoint del stream se guarda en /tmp/hdfs_checkpoint
 
    **Verifica si existen los ficheros .parquet:**
-    ```bash
+ 
     docker exec -it hadoop-datanode bash
+    
     hdfs dfs -ls /user/spark/flight_prediction
+    
     hdfs dfs -cat <nombre_del_parquet
 
 ###  Evidencia visual del guardado en HDFS
