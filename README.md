@@ -140,7 +140,7 @@ En scheduling:
 
 3. Abre los .txt generados:
    
-cat <nombre_del_txt>
+    cat <nombre_del_txt>
 
 Deberías ver las predicciones en formato JSON.
 
