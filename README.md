@@ -75,10 +75,10 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
 
 3. **Accede al contenedor kafka**
    ```bash
-   docker exec -it kafka kafka-console-consumer.sh \
-  --bootstrap-server kafka:9092 \
-  --topic flight-delay-ml-response \
-  --from-beginning
+    docker exec -it kafka kafka-console-consumer.sh \
+   --bootstrap-server kafka:9092 \
+   --topic flight-delay-ml-response \
+   --from-beginning
 
     Deberías ver JSONs con las predicciones completas.
 
