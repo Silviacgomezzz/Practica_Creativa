@@ -38,7 +38,7 @@ El primer objetivo de esta práctica consiste en dockerizar todos los servicios 
 
 4. **Accede a las interfaces web**
 
-   Flask UI: http://localhost:5001
+   Flask UI: [http://localhost:5001](http://localhost:5001/flights/delays/predict_kafka)
 
    Spark Master: http://localhost:8086
 
@@ -60,7 +60,7 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
 
 1. **Enviar una predicción desde la app**
 
-    Abre tu navegador en: http://localhost:5001
+    Abre tu navegador en: [http://localhost:5001](http://localhost:5001/flights/delays/predict_kafka)
 
     Rellena los campos y haz clic en Enviar predicción.
 
