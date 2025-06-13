@@ -19,24 +19,25 @@ El primer objetivo de esta práctica consiste en dockerizar todos los servicios 
 
 ### Pasos para desplegar
 
-1. **Clonar  repositorio**  
+1. **Clonar  repositorio**
+   
    git clone <URL_DEL_REPOSITORIO>
 
    cd <nombre_del_proyecto>
 
-2. **Lanzar todos los servicios con Docker Compose**
+3. **Lanzar todos los servicios con Docker Compose**
 
     docker compose up 
 
     Este comando construye y arranca todos los servicios.
 
- 3. **Verifica que los servicios están funcionando**
+ 4. **Verifica que los servicios están funcionando**
 
     Consulta el estado de los contenedores:
 
     docker compose ps
 
-4. **Accede a las interfaces web**
+5. **Accede a las interfaces web**
 
    Flask UI: [http://localhost:5001](http://localhost:5001/flights/delays/predict_kafka)
 
