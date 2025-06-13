@@ -80,7 +80,7 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
    --topic flight-delay-ml-response \
    --from-beginning
 
-   Deberías ver JSONs con las predicciones completas.
+  Deberías ver JSONs con las predicciones completas.
 
 3. **Verificar que se guardó en MongoDB**
 
@@ -91,7 +91,7 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
    use agile_data_science
    db.flight_delay_ml_response.find().pretty()
 
-   Cada documento debe contener los datos de entrada más la predicción.
+  Cada documento debe contener los datos de entrada más la predicción.
 
 ## 3. Desplegar NiFi y guardar predicciones en un fichero `.txt` cada 10 segundos
 
