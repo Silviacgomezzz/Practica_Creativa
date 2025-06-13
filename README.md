@@ -120,7 +120,7 @@ Desde la interfaz gráfica, hemos creado el siguiente flujo:
 - **Group ID**: `nifi-group`
 - **Auto Offset Reset**: `earliest`
   
-En scheduling:
+ En scheduling:
 - **Run schedule**: `10 sec`
 
 
