@@ -80,7 +80,7 @@ En este paso hemos modificado el código de Spark para que las predicciones se e
    --topic flight-delay-ml-response \
    --from-beginning
 
-    Deberías ver JSONs con las predicciones completas.
+   Deberías ver JSONs con las predicciones completas.
 
 5. **Verificar que se guardó en MongoDB**
 
