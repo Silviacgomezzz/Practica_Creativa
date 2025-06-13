@@ -42,6 +42,11 @@ El primer objetivo de esta práctica consiste en dockerizar todos los servicios 
 
    Spark Master: http://localhost:8086
 
+   ![spark](https://github.com/user-attachments/assets/c80b18dd-07b8-47c5-8561-0f52e5d886a1)
+
+   Aquí comprobamos que tenemos un master y dos workers.
+
+
    NiFi: http://localhost:8080
 
    HDFS UI: http://localhost:9870
