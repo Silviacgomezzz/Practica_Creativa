@@ -129,6 +129,8 @@ En scheduling:
 - **Conflict Resolution Strategy**: `replace`
 - Este directorio está mapeado localmente en `./nifi_out/`.
 
+Para no tener que configurar el flujo manualmente, se puede emplear el template "nifi.xml" disponible.
+
 ### Verificación
 
 1. Envía una predicción desde Flask.
