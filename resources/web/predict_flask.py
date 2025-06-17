@@ -509,22 +509,34 @@ def flight_delays_page_kafka():
   
   return render_template('flight_delays_predict_kafka.html', form_config=form_config)
 
+from kafka import KafkaConsumer
+
+PREDICTION_RESPONSE_TOPIC = 'flight-delay-ml-response'
+
 @app.route("/flights/delays/predict/classify_realtime/response/<unique_id>")
 def classify_flight_delays_realtime_response(unique_id):
-  """Serves predictions to polling requestors"""
-  
-  prediction = client.agile_data_science.flight_delay_ml_response.find_one(
-    {
-      "UUID": unique_id
-    }
-  )
-  
-  response = {"status": "WAIT", "id": unique_id}
-  if prediction:
-    response["status"] = "OK"
-    response["prediction"] = prediction
-  
-  return json_util.dumps(response)
+    """Serves predictions to polling requestors"""
+
+    consumer = KafkaConsumer(
+        PREDICTION_RESPONSE_TOPIC,
+        bootstrap_servers=['kafka:9092'],
+        api_version=(0, 10),
+        auto_offset_reset='earliest',
+        enable_auto_commit=False,
+        value_deserializer=lambda m: json.loads(m.decode('utf-8')),
+        group_id=None
+    )
+
+    response = {"status": "WAIT", "id": unique_id}
+
+    for msg in consumer:
+        if msg.value.get("UUID") == unique_id:
+            response["status"] = "OK"
+            response["prediction"] = msg.value
+            break
+
+    consumer.close()
+    return json_util.dumps(response)
 
 def shutdown_server():
   func = request.environ.get('werkzeug.server.shutdown')
